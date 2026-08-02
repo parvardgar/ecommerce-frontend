@@ -3,6 +3,8 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 
 import appCss from "../styles.css?url"
+import { DirectionProvider } from "@/components/ui/direction"
+import { AppProviders } from "@/components/providers/app-providers"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -36,12 +38,14 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        {children}
+        <DirectionProvider direction="rtl">
+          <AppProviders>{children}</AppProviders>
+        </DirectionProvider>
         <TanStackDevtools
           config={{
             position: "bottom-right",
