@@ -1,7 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox"
 
-export interface CheckboxFilterOption {
-    id: number
+export interface CheckboxFilterOption<T = number> {
+    id: T
     label: string
     count?: number
 }
