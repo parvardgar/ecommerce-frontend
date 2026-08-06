@@ -9,10 +9,9 @@ import {
 export type ProductSort =
     | "featured"
     | "newest"
-    | "price-asc"
-    | "price-desc"
+    | "price_asc"
+    | "price_desc"
     | "rating"
-    | "name"
 
 interface SortDropdownProps {
     value: ProductSort

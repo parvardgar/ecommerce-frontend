@@ -25,6 +25,7 @@ import {
     type ProductView,
 } from "@/features/products/components/toolbar/view-switcher"
 import { PageLayout } from "@/components/common/page-layout"
+import { Route } from "@/routes/(public)/products"
 
 const products: Product[] = [
     {
@@ -173,29 +174,81 @@ const availabilityOptions = [
 ]
 
 export function ProductListPage() {
-    const [sort, setSort] =
-        useState<ProductSort>("featured")
+    const search = Route.useSearch()
+    const navigate = Route.useNavigate()
 
-    const [view, setView] =
-        useState<ProductView>("grid")
+    const setPage = (page: number) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                page,
+            }),
+        })
 
-    const [page, setPage] =
-        useState(1)
+    const setSort = (sort: ProductSort) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                page: 1,
+                sort,
+            }),
+        })
 
-    const [selectedCategories, setSelectedCategories] =
-        useState<number[]>([])
+    const setView = (view: ProductView) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                view,
+            }),
+        })
 
-    const [selectedBrands, setSelectedBrands] =
-        useState<number[]>([])
+    const setCategories = (categories: number[]) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                page: 1,
+                categories,
+            }),
+        })
 
-    const [priceRange, setPriceRange] =
-        useState<[number, number]>([0, 5000])
+    const setBrands = (brands: number[]) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                page: 1,
+                brands,
+            }),
+        })
 
-    const [selectedRatings, setSelectedRatings] =
-        useState<number[]>([])
+    const setRatings = (ratings: number[]) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                page: 1,
+                ratings,
+            }),
+        })
 
-    const [selectedAvailability, setSelectedAvailability] =
-        useState<number[]>([])
+    const setAvailability = (availability: number[]) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                page: 1,
+                availability,
+            }),
+        })
+
+    const setPriceRange = (
+        [minPrice, maxPrice]: [number, number],
+    ) =>
+        navigate({
+            search: (prev) => ({
+                ...prev,
+                page: 1,
+                minPrice,
+                maxPrice,
+            }),
+        })
     return (
         <Container className="py-10">
             <div className="space-y-8">
@@ -220,19 +273,22 @@ export function ProductListPage() {
                     sidebar={
                         <FiltersSidebar
                             categories={categories}
-                            selectedCategories={selectedCategories}
-                            onSelectedCategoriesChange={setSelectedCategories}
+                            selectedCategories={search.categories}
+                            onSelectedCategoriesChange={setCategories}
                             brands={brands}
-                            selectedBrands={selectedBrands}
-                            onSelectedBrandsChange={setSelectedBrands}
-                            priceRange={priceRange}
+                            selectedBrands={search.brands}
+                            onSelectedBrandsChange={setBrands}
+                            priceRange={[
+                                search.minPrice,
+                                search.maxPrice,
+                            ]}
                             onPriceRangeChange={setPriceRange}
                             ratings={ratings}
-                            selectedRatings={selectedRatings}
-                            onSelectedRatingsChange={setSelectedRatings}
+                            selectedRatings={search.ratings}
+                            onSelectedRatingsChange={setRatings}
                             availabilityOptions={availabilityOptions}
-                            selectedAvailability={selectedAvailability}
-                            onSelectedAvailabilityChange={setSelectedAvailability}
+                            selectedAvailability={search.availability}
+                            onSelectedAvailabilityChange={setAvailability}
                         />
                     }
                 >
@@ -240,13 +296,13 @@ export function ProductListPage() {
                         totalProducts={products.length}
                         sort={
                             <SortDropdown
-                                value={sort}
+                                value={search.sort}
                                 onValueChange={setSort}
                             />
                         }
                         view={
                             <ViewSwitcher
-                                value={view}
+                                value={search.view}
                                 onValueChange={setView}
                             />
                         }
@@ -262,7 +318,7 @@ export function ProductListPage() {
                     </ProductGrid>
 
                     <ProductPagination
-                        page={page}
+                        page={search.page}
                         totalPages={8}
                         onPageChange={setPage}
                     />
