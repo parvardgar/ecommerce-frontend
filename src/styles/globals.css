@@ -158,3 +158,11 @@
         color: var(--primary-foreground);
     }
 }
+
+html[dir="rtl"] .products-layout {
+    flex-direction: row-reverse;
+}
+
+html[dir="ltr"] .products-layout {
+    flex-direction: row;
+}

@@ -1,0 +1,7 @@
+export * from "./components/hero"
+export * from "./components/promo-banner"
+export * from "./components/categories"
+export * from "./components/featured-products"
+export * from "./components/new-arrivals"
+export * from "./components/brands"
+export * from "./components/newsletter"
