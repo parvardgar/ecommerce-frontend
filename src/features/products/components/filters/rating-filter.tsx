@@ -1,14 +1,11 @@
 import { Star } from "lucide-react"
 
+import type { CheckboxFilterOption } from "./checkbox-filter-group"
+
 import { Checkbox } from "@/components/ui/checkbox"
 
-export interface RatingOption {
-    value: number
-    count?: number
-}
-
 interface RatingFilterProps {
-    ratings: RatingOption[]
+    ratings: CheckboxFilterOption<number>[]
 
     value: number[]
 
@@ -22,9 +19,14 @@ export function RatingFilter({
 }: RatingFilterProps) {
     function toggleRating(rating: number) {
         if (value.includes(rating)) {
-            onValueChange(value.filter((item) => item !== rating))
+            onValueChange(
+                value.filter((item) => item !== rating),
+            )
         } else {
-            onValueChange([...value, rating])
+            onValueChange([
+                ...value,
+                rating,
+            ])
         }
     }
 
@@ -37,7 +39,7 @@ export function RatingFilter({
             <div className="space-y-3">
                 {ratings.map((rating) => (
                     <label
-                        key={rating.value}
+                        key={rating.id}
                         className="flex cursor-pointer items-center justify-between"
                     >
                         {rating.count !== undefined && (
@@ -52,7 +54,7 @@ export function RatingFilter({
                                     <Star
                                         key={index}
                                         className={
-                                            index < rating.value
+                                            index < rating.id
                                                 ? "size-4 fill-current text-yellow-500"
                                                 : "size-4 text-muted-foreground"
                                         }
@@ -65,9 +67,9 @@ export function RatingFilter({
                             </div>
 
                             <Checkbox
-                                checked={value.includes(rating.value)}
+                                checked={value.includes(rating.id)}
                                 onCheckedChange={() =>
-                                    toggleRating(rating.value)
+                                    toggleRating(rating.id)
                                 }
                             />
                         </div>
