@@ -1,6 +1,3 @@
-import type { Product } from "@/types/product"
-import { useState } from "react"
-
 import { Breadcrumb } from "@/components/common/breadcrumb"
 import { Container } from "@/components/common/container"
 import { PageHeader } from "@/components/common/page-header"
@@ -26,157 +23,34 @@ import {
 } from "@/features/products/components/toolbar/view-switcher"
 import { PageLayout } from "@/components/common/page-layout"
 import { Route } from "@/routes/(public)/products"
-
-const products: Product[] = [
-    {
-        id: 1,
-        slug: "iphone-16-pro",
-        name: "iPhone 16 Pro",
-        image: "/images/products/iphone-16-pro.webp",
-
-        price: 999,
-        originalPrice: 1099,
-
-        rating: 4.8,
-        reviews: 124,
-
-        badge: {
-            label: "New",
-            variant: "sale",
-        },
-    },
-
-    {
-        id: 2,
-        slug: "sony-wh1000xm6",
-        name: "Sony WH-1000XM6",
-        image: "/images/products/sony-wh1000xm6.webp",
-
-        price: 399,
-        originalPrice: 449,
-
-        rating: 4.9,
-        reviews: 89,
-
-        badge: {
-            label: "Sale",
-            variant: "destructive",
-        },
-    },
-
-    {
-        id: 3,
-        slug: "apple-watch-ultra-2",
-        name: "Apple Watch Ultra 2",
-        image: "/images/products/apple-watch-ultra.webp",
-
-        price: 799,
-
-        rating: 4.7,
-        reviews: 56,
-    },
-
-    {
-        id: 4,
-        slug: "ipad-air-m3",
-        name: "iPad Air M3",
-        image: "/images/products/ipad-air.webp",
-
-        price: 699,
-        originalPrice: 749,
-
-        rating: 4.8,
-        reviews: 73,
-
-        badge: {
-            label: "Popular",
-            variant: "sale",
-        },
-    },
-    {
-        id: 5,
-        slug: "apple-watch-ultra-2",
-        name: "Apple Watch Ultra 2",
-        image: "/images/products/apple-watch-ultra.webp",
-
-        price: 799,
-
-        rating: 4.7,
-        reviews: 56,
-    },
-    {
-        id: 6,
-        slug: "apple-watch-ultra-2",
-        name: "Apple Watch Ultra 2",
-        image: "/images/products/apple-watch-ultra.webp",
-
-        price: 799,
-
-        rating: 4.7,
-        reviews: 56,
-    },
-    {
-        id: 7,
-        slug: "apple-watch-ultra-2",
-        name: "Apple Watch Ultra 2",
-        image: "/images/products/apple-watch-ultra.webp",
-
-        price: 799,
-
-        rating: 4.7,
-        reviews: 56,
-    },
-    {
-        id: 8,
-        slug: "apple-watch-ultra-2",
-        name: "Apple Watch Ultra 2",
-        image: "/images/products/apple-watch-ultra.webp",
-
-        price: 799,
-
-        rating: 4.7,
-        reviews: 56,
-    },
-    {
-        id: 9,
-        slug: "apple-watch-ultra-2",
-        name: "Apple Watch Ultra 2",
-        image: "/images/products/apple-watch-ultra.webp",
-
-        price: 799,
-
-        rating: 4.7,
-        reviews: 56,
-    },
-]
-
-const categories = [
-    { id: 1, label: "Electronics", count: 42 },
-    { id: 2, label: "Fashion", count: 18 },
-    { id: 3, label: "Accessories", count: 33 },
-]
-
-const brands = [
-    { id: 1, label: "Apple", count: 18 },
-    { id: 2, label: "Sony", count: 9 },
-    { id: 3, label: "Samsung", count: 14 },
-]
-
-const ratings = [
-    { value: 4, count: 52 },
-    { value: 3, count: 81 },
-    { value: 2, count: 97 },
-]
-
-const availabilityOptions = [
-    { id: 1, label: "In Stock" },
-    { id: 2, label: "On Sale" },
-]
+import { useProductFiltersQuery, useProductsQuery } from "@/features/products/api"
+import { LoadingState } from "@/components/common/loading-state"
+import { ErrorState } from "@/components/common/error-state"
+import { EmptyState } from "@/components/common/empty-state"
 
 export function ProductListPage() {
     const search = Route.useSearch()
     const navigate = Route.useNavigate()
 
+    const productsQuery = useProductsQuery({
+        page: search.page,
+
+        sort: search.sort,
+
+        categories: search.categories,
+
+        brands: search.brands,
+
+        ratings: search.ratings,
+
+        availability: search.availability,
+
+        minPrice: search.minPrice,
+
+        maxPrice: search.maxPrice,
+    })
+    const filtersQuery = useProductFiltersQuery()
+    
     const setPage = (page: number) =>
         navigate({
             search: (prev) => ({
@@ -249,6 +123,33 @@ export function ProductListPage() {
                 maxPrice,
             }),
         })
+    
+    if (productsQuery.isPending || filtersQuery.isPending) {
+        return (
+            <Container className="py-10">
+                <LoadingState
+                    title="Loading products"
+                    description="Please wait while we fetch the latest products."
+                />
+            </Container>
+        )
+    }
+    if (productsQuery.isError || filtersQuery.isError) {
+        return (
+            <Container className="py-10">
+                <ErrorState
+                    title="Failed to load products"
+                    description="We couldn't load the products. Please try again."
+                    onRetry={() => productsQuery.refetch()}
+                />
+            </Container>
+        )
+    }
+
+    const data = productsQuery.data
+    const products = data?.results ?? []
+    const filters = filtersQuery.data
+
     return (
         <Container className="py-10">
             <div className="space-y-8">
@@ -266,16 +167,16 @@ export function ProductListPage() {
 
                 <PageHeader
                     title="Products"
-                    description="Showing 12 products"
+                    description={`Showing ${data?.count ?? 0} products`}
                 />
 
                 <PageLayout
                     sidebar={
                         <FiltersSidebar
-                            categories={categories}
+                            categories={filters.categories}
                             selectedCategories={search.categories}
                             onSelectedCategoriesChange={setCategories}
-                            brands={brands}
+                            brands={filters.brands}
                             selectedBrands={search.brands}
                             onSelectedBrandsChange={setBrands}
                             priceRange={[
@@ -283,17 +184,17 @@ export function ProductListPage() {
                                 search.maxPrice,
                             ]}
                             onPriceRangeChange={setPriceRange}
-                            ratings={ratings}
+                            ratings={filters.ratings}
                             selectedRatings={search.ratings}
                             onSelectedRatingsChange={setRatings}
-                            availabilityOptions={availabilityOptions}
+                            availabilityOptions={filters.availability}
                             selectedAvailability={search.availability}
                             onSelectedAvailabilityChange={setAvailability}
                         />
                     }
                 >
                     <ProductToolbar
-                        totalProducts={products.length}
+                        totalProducts={data?.count ?? 0}
                         sort={
                             <SortDropdown
                                 value={search.sort}
@@ -308,18 +209,45 @@ export function ProductListPage() {
                         }
                     />
 
-                    <ProductGrid>
-                        {products.map((product) => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                            />
-                        ))}
-                    </ProductGrid>
+                    {products.length === 0 ? (
+                        <EmptyState
+                            title="No products found"
+                            description="Try changing your filters or search criteria."
+                            actionLabel="Clear filters"
+                            onAction={() =>
+                                navigate({
+                                    search: (prev) => ({
+                                        ...prev,
+                                        page: 1,
+                                        categories: [],
+                                        brands: [],
+                                        ratings: [],
+                                        availability: [],
+                                        minPrice: 0,
+                                        maxPrice: 5000,
+                                    }),
+                                })
+                            }
+                        />
+                    ) : (
+                        <ProductGrid>
+                            {products.map((product) => (
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                />
+                            ))}
+                        </ProductGrid>
+                    )}
 
                     <ProductPagination
                         page={search.page}
-                        totalPages={8}
+                        totalPages={
+                            Math.max(
+                                1,
+                                Math.ceil((data?.count ?? 0) / 12),
+                            )
+                        }
                         onPageChange={setPage}
                     />
                 </PageLayout>
@@ -327,32 +255,3 @@ export function ProductListPage() {
         </Container>
     )
 }
-
-
-
-
-
-// I would change one thing
-
-// Now that we've reached the end of the Products page UI, I would not keep page, sort, view, and all filter selections in useState.
-
-// Your stack includes TanStack Router, and this is exactly what its typed search parameters are designed for.
-
-// Instead of:
-
-// const [page, setPage] = useState(1)
-// const [sort, setSort] = useState("featured")
-
-// I'd aim for URLs like:
-
-// /products?page=2
-// /products?page=2&sort=price-desc
-// /products?page=2&sort=price-desc&brand=3&category=5
-
-// That gives you:
-
-// Refresh-safe state
-// Shareable URLs
-// Browser back/forward support
-// Better SEO and analytics
-// A single source of truth for the catalog state
