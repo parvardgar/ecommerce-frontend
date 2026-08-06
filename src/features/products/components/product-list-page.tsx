@@ -24,6 +24,7 @@ import {
     ViewSwitcher,
     type ProductView,
 } from "@/features/products/components/toolbar/view-switcher"
+import { PageLayout } from "@/components/common/page-layout"
 
 const products: Product[] = [
     {
@@ -90,6 +91,61 @@ const products: Product[] = [
             label: "Popular",
             variant: "sale",
         },
+    },
+    {
+        id: 5,
+        slug: "apple-watch-ultra-2",
+        name: "Apple Watch Ultra 2",
+        image: "/images/products/apple-watch-ultra.webp",
+
+        price: 799,
+
+        rating: 4.7,
+        reviews: 56,
+    },
+    {
+        id: 6,
+        slug: "apple-watch-ultra-2",
+        name: "Apple Watch Ultra 2",
+        image: "/images/products/apple-watch-ultra.webp",
+
+        price: 799,
+
+        rating: 4.7,
+        reviews: 56,
+    },
+    {
+        id: 7,
+        slug: "apple-watch-ultra-2",
+        name: "Apple Watch Ultra 2",
+        image: "/images/products/apple-watch-ultra.webp",
+
+        price: 799,
+
+        rating: 4.7,
+        reviews: 56,
+    },
+    {
+        id: 8,
+        slug: "apple-watch-ultra-2",
+        name: "Apple Watch Ultra 2",
+        image: "/images/products/apple-watch-ultra.webp",
+
+        price: 799,
+
+        rating: 4.7,
+        reviews: 56,
+    },
+    {
+        id: 9,
+        slug: "apple-watch-ultra-2",
+        name: "Apple Watch Ultra 2",
+        image: "/images/products/apple-watch-ultra.webp",
+
+        price: 799,
+
+        rating: 4.7,
+        reviews: 56,
     },
 ]
 
@@ -160,63 +216,57 @@ export function ProductListPage() {
                     description="Showing 12 products"
                 />
 
-                <div className="flex flex-col gap-8 lg:flex-row">
-                    <aside className="w-full lg:w-[280px] lg:flex-shrink-0">
+                <PageLayout
+                    sidebar={
                         <FiltersSidebar
                             categories={categories}
                             selectedCategories={selectedCategories}
                             onSelectedCategoriesChange={setSelectedCategories}
-
                             brands={brands}
                             selectedBrands={selectedBrands}
                             onSelectedBrandsChange={setSelectedBrands}
-
                             priceRange={priceRange}
                             onPriceRangeChange={setPriceRange}
-
                             ratings={ratings}
                             selectedRatings={selectedRatings}
                             onSelectedRatingsChange={setSelectedRatings}
-
                             availabilityOptions={availabilityOptions}
                             selectedAvailability={selectedAvailability}
                             onSelectedAvailabilityChange={setSelectedAvailability}
                         />
-                    </aside>
-                    <div className="min-w-0 flex-1 space-y-8">
-                        <ProductToolbar
-                            totalProducts={products.length}
-                            sort={
-                                <SortDropdown
-                                    value={sort}
-                                    onValueChange={setSort}
-                                />
-                            }
-                            view={
-                                <ViewSwitcher
-                                    value={view}
-                                    onValueChange={setView}
-                                />
-                            }
-                        />
+                    }
+                >
+                    <ProductToolbar
+                        totalProducts={products.length}
+                        sort={
+                            <SortDropdown
+                                value={sort}
+                                onValueChange={setSort}
+                            />
+                        }
+                        view={
+                            <ViewSwitcher
+                                value={view}
+                                onValueChange={setView}
+                            />
+                        }
+                    />
 
-                        <ProductGrid>
-                            {products.map(product => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                />
-                            ))}
-                        </ProductGrid>
+                    <ProductGrid>
+                        {products.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                            />
+                        ))}
+                    </ProductGrid>
 
-                        <ProductPagination
-                            page={page}
-                            totalPages={8}
-                            onPageChange={setPage}
-                        />
-                    </div>
-                    
-                </div>
+                    <ProductPagination
+                        page={page}
+                        totalPages={8}
+                        onPageChange={setPage}
+                    />
+                </PageLayout>
             </div>
         </Container>
     )
