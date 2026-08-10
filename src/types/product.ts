@@ -1,22 +1,32 @@
 export interface Product {
-    id: number
+    id: string
     name: string
     slug: string
-    image: string
 
     price: number
-    originalPrice?: number
+    compareAtPrice?: number | null
+
+    images: ProductImage[]
 
     rating: number
-    reviews: number
+    reviewsCount: number
 
-    badge?: {
-        label: string
-        variant:
-            | "sale"
-            | "new"
-            | "success"
-            | "warning"
-            | "destructive"
-    }
+    badge?: ProductBadge | null
+}
+
+export interface ProductImage {
+    id: string
+    image: string
+    altText?: string | null
+    sortOrder: number
+}
+
+export interface ProductBadge {
+    label: string
+    variant:
+        | "sale"
+        | "new"
+        | "success"
+        | "warning"
+        | "destructive"
 }

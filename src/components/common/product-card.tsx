@@ -13,6 +13,8 @@ interface ProductCardProps {
 export function ProductCard({
     product,
 }: ProductCardProps) {
+    const image = product.images[0]
+
     return (
         <Link
             to="/products/$slug"
@@ -20,15 +22,24 @@ export function ProductCard({
             className="group block overflow-hidden rounded-xl border bg-background transition-shadow hover:shadow-md"
         >
             <div className="relative aspect-square overflow-hidden bg-muted">
-                <img
-                    src={product.image}
-                    alt={product.name}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+                {image && (
+                    <img
+                        src={image.image}
+                        alt={
+                            image.altText ??
+                            product.name
+                        }
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                )}
 
                 {product.badge && (
                     <div className="absolute left-3 top-3">
-                        <Badge variant={product.badge.variant}>
+                        <Badge
+                            variant={
+                                product.badge.variant
+                            }
+                        >
                             {product.badge.label}
                         </Badge>
                     </div>
@@ -42,12 +53,15 @@ export function ProductCard({
 
                 <Rating
                     value={product.rating}
-                    reviews={product.reviews}
+                    reviews={product.reviewsCount}
                 />
 
                 <Price
                     price={product.price}
-                    originalPrice={product.originalPrice}
+                    originalPrice={
+                        product.compareAtPrice ??
+                        undefined
+                    }
                 />
             </div>
         </Link>

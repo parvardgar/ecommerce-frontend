@@ -11,15 +11,16 @@ import {
 } from "./availability-filter"
 
 import { cn } from "@/lib/utils"
+import type { Availability } from "../../types"
 
 interface FiltersSidebarProps {
     categories: CategoryOption[]
-    selectedCategories: number[]
-    onSelectedCategoriesChange: (value: number[]) => void
+    selectedCategories: string[]
+    onSelectedCategoriesChange: (value: string[]) => void
 
     brands: BrandOption[]
-    selectedBrands: number[]
-    onSelectedBrandsChange: (value: number[]) => void
+    selectedBrands: string[]
+    onSelectedBrandsChange: (value: string[]) => void
 
     priceRange: [number, number]
     onPriceRangeChange: (value: [number, number]) => void
@@ -29,8 +30,8 @@ interface FiltersSidebarProps {
     onSelectedRatingsChange: (value: number[]) => void
 
     availabilityOptions: AvailabilityOption[]
-    selectedAvailability: number[]
-    onSelectedAvailabilityChange: (value: number[]) => void
+    selectedAvailability: Availability[]
+    onSelectedAvailabilityChange: (value: Availability[]) => void
 
     className?: string
 }

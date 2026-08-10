@@ -1,16 +1,12 @@
 import type { CheckboxFilterOption } from "../components/filters/checkbox-filter-group"
 
-export interface FilterOption {
-    value: number
-    label: string
-    count: number
-}
+import type { Availability } from "./product-list"
 
 export interface ProductFiltersResponse {
-    categories: CheckboxFilterOption<number>[]
-    brands: CheckboxFilterOption<number>[]
+    categories: CheckboxFilterOption<string>[]
+    brands: CheckboxFilterOption<string>[]
     ratings: CheckboxFilterOption<number>[]
-    availability: CheckboxFilterOption<number>[]
+    availability: CheckboxFilterOption<Availability>[]
 
     priceRange: {
         min: number

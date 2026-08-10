@@ -8,9 +8,9 @@ export interface BrandOption extends CheckboxFilterOption {}
 interface BrandFilterProps {
     brands: BrandOption[]
 
-    value: number[]
+    value: string[]
 
-    onValueChange: (value: number[]) => void
+    onValueChange: (value: string[]) => void
 }
 
 export function BrandFilter(props: BrandFilterProps) {

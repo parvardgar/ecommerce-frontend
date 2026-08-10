@@ -24,13 +24,20 @@ const productsSearchSchema = z.object({
         ])
         .catch("grid"),
 
-    categories: z.array(z.number()).catch([]),
+    categories: z.array(z.string()).catch([]),
 
-    brands: z.array(z.number()).catch([]),
+    brands: z.array(z.string()).catch([]),
 
     ratings: z.array(z.number()).catch([]),
 
-    availability: z.array(z.number()).catch([]),
+    availability: z
+        .array(
+            z.enum([
+                "in_stock",
+                "out_of_stock",
+            ]),
+        )
+        .default([]),
 
     minPrice: z.number().catch(0),
 

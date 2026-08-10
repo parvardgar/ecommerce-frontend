@@ -11,49 +11,101 @@ import type { Product } from "@/types/product"
 
 const products: Product[] = [
     {
-        id: 101,
-        slug: "macbook-air-m4",
-        name: "MacBook Air M4",
-        image: "/images/products/macbook-air-m4.webp",
-        price: 1299,
-        originalPrice: 1399,
-        rating: 4.9,
-        reviews: 32,
+        id: "featured-1",
+        slug: "iphone-16-pro",
+        name: "iPhone 16 Pro",
+
+        images: [
+            {
+                id: "featured-image-1",
+                image: "/images/products/iphone-16-pro.webp",
+                altText: "iPhone 16 Pro",
+                sortOrder: 0,
+            },
+        ],
+
+        price: 999,
+        compareAtPrice: 1099,
+
+        rating: 4.8,
+        reviewsCount: 124,
+
         badge: {
             label: "New",
+            variant: "new",
+        },
+    },
+
+    {
+        id: "featured-2",
+        slug: "sony-wh1000xm6",
+        name: "Sony WH-1000XM6",
+
+        images: [
+            {
+                id: "featured-image-2",
+                image: "/images/products/sony-wh1000xm6.webp",
+                altText: "Sony WH-1000XM6",
+                sortOrder: 0,
+            },
+        ],
+
+        price: 399,
+        compareAtPrice: 449,
+
+        rating: 4.9,
+        reviewsCount: 89,
+
+        badge: {
+            label: "Sale",
             variant: "sale",
         },
     },
+
     {
-        id: 102,
-        slug: "galaxy-s26",
-        name: "Samsung Galaxy S26",
-        image: "/images/products/galaxy-s26.webp",
-        price: 999,
-        rating: 4.8,
-        reviews: 21,
-    },
-    {
-        id: 103,
-        slug: "airpods-pro-3",
-        name: "AirPods Pro 3",
-        image: "/images/products/airpods-pro-3.webp",
-        price: 299,
+        id: "featured-3",
+        slug: "apple-watch-ultra-2",
+        name: "Apple Watch Ultra 2",
+
+        images: [
+            {
+                id: "featured-image-3",
+                image: "/images/products/apple-watch-ultra.webp",
+                altText: "Apple Watch Ultra 2",
+                sortOrder: 0,
+            },
+        ],
+
+        price: 799,
+
         rating: 4.7,
-        reviews: 45,
-        badge: {
-            label: "Hot",
-            variant: "destructive",
-        },
+        reviewsCount: 56,
     },
+
     {
-        id: 104,
-        slug: "steam-deck-oled",
-        name: "Steam Deck OLED",
-        image: "/images/products/steam-deck-oled.webp",
-        price: 649,
-        rating: 4.9,
-        reviews: 67,
+        id: "featured-4",
+        slug: "ipad-air-m3",
+        name: "iPad Air M3",
+
+        images: [
+            {
+                id: "featured-image-4",
+                image: "/images/products/ipad-air.webp",
+                altText: "iPad Air M3",
+                sortOrder: 0,
+            },
+        ],
+
+        price: 699,
+        compareAtPrice: 749,
+
+        rating: 4.8,
+        reviewsCount: 73,
+
+        badge: {
+            label: "Popular",
+            variant: "success",
+        },
     },
 ]
 

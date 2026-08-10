@@ -8,9 +8,9 @@ export interface CategoryOption extends CheckboxFilterOption {}
 interface CategoryFilterProps {
     categories: CategoryOption[]
 
-    value: number[]
+    value: string[]
 
-    onValueChange: (value: number[]) => void
+    onValueChange: (value: string[]) => void
 }
 
 export function CategoryFilter(props: CategoryFilterProps) {

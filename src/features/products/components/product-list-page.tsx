@@ -27,11 +27,12 @@ import { useProductFiltersQuery, useProductsQuery } from "@/features/products/ap
 import { LoadingState } from "@/components/common/loading-state"
 import { ErrorState } from "@/components/common/error-state"
 import { EmptyState } from "@/components/common/empty-state"
+import type { Availability } from "../types/product-list"
 
 export function ProductListPage() {
     const search = Route.useSearch()
     const navigate = Route.useNavigate()
-
+    // console.log("PRODUCT SEARCH:", search)
     const productsQuery = useProductsQuery({
         page: search.page,
 
@@ -76,7 +77,7 @@ export function ProductListPage() {
             }),
         })
 
-    const setCategories = (categories: number[]) =>
+    const setCategories = (categories: string[]) =>
         navigate({
             search: (prev) => ({
                 ...prev,
@@ -85,7 +86,7 @@ export function ProductListPage() {
             }),
         })
 
-    const setBrands = (brands: number[]) =>
+    const setBrands = (brands: string[]) =>
         navigate({
             search: (prev) => ({
                 ...prev,
@@ -103,7 +104,7 @@ export function ProductListPage() {
             }),
         })
 
-    const setAvailability = (availability: number[]) =>
+    const setAvailability = (availability: Availability[]) =>
         navigate({
             search: (prev) => ({
                 ...prev,
@@ -135,21 +136,30 @@ export function ProductListPage() {
         )
     }
     if (productsQuery.isError || filtersQuery.isError) {
+        // console.error("Products query:", productsQuery.error)
+        // console.error("Filters query:", filtersQuery.error)
         return (
             <Container className="py-10">
                 <ErrorState
                     title="Failed to load products"
-                    description="We couldn't load the products. Please try again."
-                    onRetry={() => productsQuery.refetch()}
+                    description={
+                        // productsQuery.error?.message ??
+                        // filtersQuery.error?.message ??
+                        "We couldn't load the products. Please try again."
+                    }
+                    onRetry={() => {
+                        productsQuery.refetch()
+                        filtersQuery.refetch()
+                    }}
                 />
             </Container>
         )
     }
 
     const data = productsQuery.data
-    const products = data?.results ?? []
+    const products = data?.items ?? []
     const filters = filtersQuery.data
-
+    
     return (
         <Container className="py-10">
             <div className="space-y-8">
@@ -167,7 +177,9 @@ export function ProductListPage() {
 
                 <PageHeader
                     title="Products"
-                    description={`Showing ${data?.count ?? 0} products`}
+                    description={`Showing ${
+                        data?.pagination.total_items ?? 0
+                    } products`}
                 />
 
                 <PageLayout
@@ -194,7 +206,9 @@ export function ProductListPage() {
                     }
                 >
                     <ProductToolbar
-                        totalProducts={data?.count ?? 0}
+                        totalProducts={
+                            data?.pagination.total_items ?? 0
+                        }
                         sort={
                             <SortDropdown
                                 value={search.sort}
@@ -243,10 +257,7 @@ export function ProductListPage() {
                     <ProductPagination
                         page={search.page}
                         totalPages={
-                            Math.max(
-                                1,
-                                Math.ceil((data?.count ?? 0) / 12),
-                            )
+                            data?.pagination.total_pages ?? 1
                         }
                         onPageChange={setPage}
                     />

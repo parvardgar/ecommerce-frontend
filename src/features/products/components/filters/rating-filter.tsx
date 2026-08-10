@@ -4,8 +4,11 @@ import type { CheckboxFilterOption } from "./checkbox-filter-group"
 
 import { Checkbox } from "@/components/ui/checkbox"
 
+export interface RatingOption
+    extends CheckboxFilterOption<number> {}
+
 interface RatingFilterProps {
-    ratings: CheckboxFilterOption<number>[]
+    ratings: RatingOption[]
 
     value: number[]
 

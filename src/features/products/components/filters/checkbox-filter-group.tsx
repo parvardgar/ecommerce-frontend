@@ -1,30 +1,29 @@
 import { Checkbox } from "@/components/ui/checkbox"
 
-export interface CheckboxFilterOption<T = number> {
+export interface CheckboxFilterOption<T = string> {
     id: T
     label: string
     count?: number
 }
 
-interface CheckboxFilterGroupProps {
+interface CheckboxFilterGroupProps<T> {
     title: string
-
-    options: CheckboxFilterOption[]
-
-    value: number[]
-
-    onValueChange: (value: number[]) => void
+    options: CheckboxFilterOption<T>[]
+    value: T[]
+    onValueChange: (value: T[]) => void
 }
 
-export function CheckboxFilterGroup({
+export function CheckboxFilterGroup<T>({
     title,
     options,
     value,
     onValueChange,
-}: CheckboxFilterGroupProps) {
-    function toggle(id: number) {
+}: CheckboxFilterGroupProps<T>) {
+    function toggle(id: T) {
         if (value.includes(id)) {
-            onValueChange(value.filter((item) => item !== id))
+            onValueChange(
+                value.filter((item) => item !== id),
+            )
         } else {
             onValueChange([...value, id])
         }
@@ -39,7 +38,7 @@ export function CheckboxFilterGroup({
             <div className="space-y-3">
                 {options.map((option) => (
                     <label
-                        key={option.id}
+                        key={String(option.id)}
                         className="flex cursor-pointer items-center justify-between"
                     >
                         {option.count !== undefined && (
