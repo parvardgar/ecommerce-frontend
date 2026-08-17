@@ -41,7 +41,7 @@ const productsSearchSchema = z.object({
 
     minPrice: z.number().catch(0),
 
-    maxPrice: z.number().catch(5000),
+    maxPrice: z.number().catch(0),
 })
 
 export const Route = createFileRoute("/(public)/products/")({

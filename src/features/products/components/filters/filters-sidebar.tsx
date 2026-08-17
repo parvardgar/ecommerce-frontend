@@ -22,8 +22,14 @@ interface FiltersSidebarProps {
     selectedBrands: string[]
     onSelectedBrandsChange: (value: string[]) => void
 
-    priceRange: [number, number]
-    onPriceRangeChange: (value: [number, number]) => void
+    priceRange: {
+        min: number
+        max: number
+    }
+    selectedPriceRange: [number, number]
+    onPriceRangeChange: (
+        value: [number, number],
+    ) => void
 
     ratings: RatingOption[]
     selectedRatings: number[]
@@ -46,6 +52,7 @@ export function FiltersSidebar({
     onSelectedBrandsChange,
 
     priceRange,
+    selectedPriceRange,
     onPriceRangeChange,
 
     ratings,
@@ -89,8 +96,11 @@ export function FiltersSidebar({
                 />
 
                 <PriceFilter
-                    range={[0, 5000]}
-                    value={priceRange}
+                    range={[
+                        priceRange.min,
+                        priceRange.max,
+                    ]}
+                    value={selectedPriceRange}
                     onValueChange={onPriceRangeChange}
                 />
 

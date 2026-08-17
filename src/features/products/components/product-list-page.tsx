@@ -32,7 +32,7 @@ import type { Availability } from "../types/product-list"
 export function ProductListPage() {
     const search = Route.useSearch()
     const navigate = Route.useNavigate()
-    // console.log("PRODUCT SEARCH:", search)
+
     const productsQuery = useProductsQuery({
         page: search.page,
 
@@ -159,6 +159,7 @@ export function ProductListPage() {
     const data = productsQuery.data
     const products = data?.items ?? []
     const filters = filtersQuery.data
+    // console.log("PRODUCT SEARCH:", filters)
     
     return (
         <Container className="py-10">
@@ -191,9 +192,10 @@ export function ProductListPage() {
                             brands={filters.brands}
                             selectedBrands={search.brands}
                             onSelectedBrandsChange={setBrands}
-                            priceRange={[
-                                search.minPrice,
-                                search.maxPrice,
+                            priceRange={filters.priceRange}
+                            selectedPriceRange={[
+                                filters.priceRange.min,
+                                filters.priceRange.max,
                             ]}
                             onPriceRangeChange={setPriceRange}
                             ratings={filters.ratings}
@@ -237,8 +239,8 @@ export function ProductListPage() {
                                         brands: [],
                                         ratings: [],
                                         availability: [],
-                                        minPrice: 0,
-                                        maxPrice: 5000,
+                                        minPrice: filters.priceRange.min,
+                                        maxPrice: filters.priceRange.max,
                                     }),
                                 })
                             }
